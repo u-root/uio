@@ -5,9 +5,8 @@
 // Package ulog exposes logging via a Go interface.
 //
 // ulog has three implementations of the Logger interface: a Go standard
-// library "log" package Logger, a kernel syslog (dmesg) Logger, and a test
-// Logger that logs via a test's testing.TB.Logf.
-// To use the test logger import "ulog/ulogtest".
+// library "log" package Logger and a test Logger that logs via a test's
+// testing.TB.Logf. To use the test logger import "ulog/ulogtest".
 package ulog
 
 import (
