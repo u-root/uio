@@ -35,7 +35,7 @@ jobs:
       - run:
           name: go mod tidy
           command: |
-            go mod tidy && go mod verify
+            go mod tidy
             git status
             if [[ -n "$(git status --porcelain .)" ]]; then
               echo 'go.mod/go.sum is out-of-date: run `go mod tidy` and then check in the changes'
