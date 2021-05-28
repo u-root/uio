@@ -7,10 +7,16 @@ package uiotest
 import (
 	"io"
 	"testing"
+	"time"
 
-	"github.com/u-root/u-root/pkg/testutil"
-	"github.com/u-root/u-root/pkg/uio"
+	"github.com/u-root/uio/uio"
 )
+
+// NowLog returns the current time formatted like the standard log package's
+// timestamp.
+func NowLog() string {
+	return time.Now().Format("2006/01/02 15:04:05")
+}
 
 // TestLineWriter is an io.Writer that logs full lines of serial to tb.
 func TestLineWriter(tb testing.TB, prefix string) io.WriteCloser {
@@ -27,7 +33,7 @@ type testLinePrefixWriter struct {
 }
 
 func (tsw *testLinePrefixWriter) OneLine(p []byte) {
-	tsw.tb.Logf("%s %s: %s", testutil.NowLog(), tsw.prefix, p)
+	tsw.tb.Logf("%s %s: %s", NowLog(), tsw.prefix, p)
 }
 
 // testLineWriter is an io.Writer that logs full lines of serial to tb.
@@ -36,5 +42,5 @@ type testLineWriter struct {
 }
 
 func (tsw *testLineWriter) OneLine(p []byte) {
-	tsw.tb.Logf("%s: %s", testutil.NowLog(), p)
+	tsw.tb.Logf("%s: %s", NowLog(), p)
 }
