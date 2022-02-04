@@ -3,7 +3,6 @@
 // license that can be found in the LICENSE file.
 
 // Package uiotest contains tests for uio functions.
-
 package uiotest
 
 import (
