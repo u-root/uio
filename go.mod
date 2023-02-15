@@ -1,6 +1,6 @@
 module github.com/u-root/uio
 
-go 1.15
+go 1.16
 
 require (
 	github.com/josharian/native v1.0.1-0.20221213033349-c1e37c09b531
