@@ -224,7 +224,7 @@ func (l *Lexer) Read8() uint8 {
 	if v == nil {
 		return 0
 	}
-	return uint8(v[0])
+	return v[0]
 }
 
 // Read16 reads a 16-bit value from the Buffer.
@@ -319,7 +319,7 @@ func (l *Lexer) WriteData(data interface{}) {
 //
 // If an error occurred, Error() will return a non-nil error.
 func (l *Lexer) Write8(v uint8) {
-	l.append(1)[0] = byte(v)
+	l.append(1)[0] = v
 }
 
 // Write16 writes a 16-bit value to the Buffer.

@@ -99,7 +99,7 @@ func TestCopySimple(t *testing.T) {
 				t.Errorf("Test %q failed. Want: %q, Got: %q", tt.name, tt.wantErr, err)
 			}
 		})
-		//After every test with NoFollowSymlink we have to delete the created symlink
+		// After every test with NoFollowSymlink we have to delete the created symlink.
 		if strings.Contains(tt.dstfile, "symlink") {
 			os.Remove(tt.dstfile)
 		}
@@ -109,7 +109,7 @@ func TestCopySimple(t *testing.T) {
 				t.Errorf("%q failed. Want: %q, Got: %q", tt.name, tt.wantErr, err)
 			}
 		})
-		//After every test with NoFollowSymlink we have to delete the created symlink
+		// After every test with NoFollowSymlink we have to delete the created symlink.
 		if strings.Contains(tt.dstfile, "symlink") {
 			os.Remove(tt.dstfile)
 		}
@@ -119,7 +119,7 @@ func TestCopySimple(t *testing.T) {
 				t.Errorf("Test %q failed. Want: %q, Got: %q", tt.name, tt.wantErr, err)
 			}
 		})
-		//After every test with NoFollowSymlink we have to delete the created symlink
+		// After every test with NoFollowSymlink we have to delete the created symlink.
 		if strings.Contains(tt.dstfile, "symlink") {
 			os.Remove(tt.dstfile)
 		}
@@ -129,7 +129,7 @@ func TestCopySimple(t *testing.T) {
 				t.Errorf("Test %q failed. Want: %q, Got: %q", tt.name, tt.wantErr, err)
 			}
 		})
-		//After every test with NoFollowSymlink we have to delete the created symlink
+		// After every test with NoFollowSymlink we have to delete the created symlink.
 		if strings.Contains(tt.dstfile, "symlink") {
 			os.Remove(tt.dstfile)
 		}

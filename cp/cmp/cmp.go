@@ -18,7 +18,7 @@ import (
 	"github.com/u-root/uio/uio"
 )
 
-// isEqualFile compare two files by checksum
+// isEqualFile compare two files by checksum.
 func isEqualFile(fpath1, fpath2 string) error {
 	file1, err := os.Open(fpath1)
 	if err != nil {
@@ -56,7 +56,7 @@ func stat(o cp.Options, path string) (os.FileInfo, error) {
 	return os.Stat(path)
 }
 
-// IsEqualTree compare the content in the file trees in src and dst paths
+// IsEqualTree compare the content in the file trees in src and dst paths.
 func IsEqualTree(o cp.Options, src, dst string) error {
 	srcInfo, err := stat(o, src)
 	if err != nil {
