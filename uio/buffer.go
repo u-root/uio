@@ -96,30 +96,13 @@ func (b *Buffer) WriteN(n int) []byte {
 
 // ErrBufferTooShort is returned when a caller wants to read more bytes than
 // are available in the buffer.
-type ErrBufferTooShort struct {
-	// Position at time of error
-	Pos int
-
-	// Total length of buffer
-	BufLength int
-
-	// Number of bytes caller wanted to read.
-	N int
-}
-
-func (e *ErrBufferTooShort) Error() string {
-	return fmt.Sprintf("buffer too short at position %d: have %d bytes, want %d bytes", e.Pos, e.BufLength, e.N)
-}
+var ErrBufferTooShort = errors.New("buffer too short")
 
 // ReadN consumes n bytes from the Buffer. It returns nil, false if there
 // aren't enough bytes left.
 func (b *Buffer) ReadN(n int) ([]byte, error) {
 	if !b.Has(n) {
-		return nil, &ErrBufferTooShort{
-			Pos:       b.byteCount,
-			BufLength: b.Len(),
-			N:         n,
-		}
+		return nil, fmt.Errorf("%w at position %d: have %d bytes, want %d bytes", ErrBufferTooShort, b.byteCount, b.Len(), n)
 	}
 	rval := b.data[:n]
 	b.data = b.data[n:]
