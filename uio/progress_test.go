@@ -22,20 +22,20 @@ func TestProgressReadCloser(t *testing.T) {
 
 	// Read one byte at a time.
 	output := make([]byte, 1)
-	prc.Read(output)
-	prc.Read(output)
-	prc.Read(output)
+	_, _ = prc.Read(output)
+	_, _ = prc.Read(output)
+	_, _ = prc.Read(output)
 	if len(stdout.Bytes()) != 0 {
 		t.Errorf("found %q, but expected no bytes to be written", stdout)
 	}
-	prc.Read(output)
+	_, _ = prc.Read(output)
 	if stdout.String() != "#" {
 		t.Errorf("found %q, expected %q to be written", stdout.String(), "#")
 	}
 
 	// Read 9 bytes all at once.
 	output = make([]byte, 9)
-	prc.Read(output)
+	_, _ = prc.Read(output)
 	if stdout.String() != "###" {
 		t.Errorf("found %q, expected %q to be written", stdout.String(), "###")
 	}

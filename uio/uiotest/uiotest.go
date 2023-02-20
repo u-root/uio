@@ -21,6 +21,7 @@ func NowLog() string {
 
 // TestLineWriter is an io.Writer that logs full lines of serial to tb.
 func TestLineWriter(tb testing.TB, prefix string) io.WriteCloser {
+	tb.Helper()
 	if len(prefix) > 0 {
 		return uio.FullLineWriter(&testLinePrefixWriter{tb: tb, prefix: prefix})
 	}

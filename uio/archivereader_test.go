@@ -67,7 +67,7 @@ func randomString(l int) string {
 	rand.Seed(time.Now().UnixNano())
 	r := make([]byte, l)
 	for i := 0; i < l; i++ {
-		r[i] = byte(choices[rand.Intn(len(choices))])
+		r[i] = choices[rand.Intn(len(choices))]
 	}
 	return string(r)
 }
@@ -114,31 +114,27 @@ type archiveReaderLZ4Case struct {
 func TestArchiveReaderLZ4(t *testing.T) {
 	for _, tt := range []archiveReaderLZ4Case{
 		{
-			name: "non-legacy regular",
-			setup: func(w io.Writer) *lz4.Writer {
-				return lz4.NewWriter(w)
-			},
+			name:    "non-legacy regular",
+			setup:   lz4.NewWriter,
 			dataStr: randomString(1024),
 		},
 		{
-			name: "non-legacy larger data",
-			setup: func(w io.Writer) *lz4.Writer {
-				return lz4.NewWriter(w)
-			},
+			name:    "non-legacy larger data",
+			setup:   lz4.NewWriter,
 			dataStr: randomString(5 * 1024),
 		},
 		{
-			name: "non-legacy short data", // Likley not realistic for most cases in the real world.
-			setup: func(w io.Writer) *lz4.Writer {
-				return lz4.NewWriter(w)
-			},
+			name:    "non-legacy short data", // Likley not realistic for most cases in the real world.
+			setup:   lz4.NewWriter,
 			dataStr: randomString(100), // Smaller than pre-read size, 1024 bytes.
 		},
 		{
 			name: "legacy regular",
 			setup: func(w io.Writer) *lz4.Writer {
 				lz4w := lz4.NewWriter(w)
-				lz4w.Apply(lz4.LegacyOption(true))
+				if err := lz4w.Apply(lz4.LegacyOption(true)); err != nil {
+					t.Fatal(err)
+				}
 				return lz4w
 			},
 			dataStr: randomString(1024),
@@ -147,7 +143,9 @@ func TestArchiveReaderLZ4(t *testing.T) {
 			name: "legacy larger data",
 			setup: func(w io.Writer) *lz4.Writer {
 				lz4w := lz4.NewWriter(w)
-				lz4w.Apply(lz4.LegacyOption(true))
+				if err := lz4w.Apply(lz4.LegacyOption(true)); err != nil {
+					t.Fatal(err)
+				}
 				return lz4w
 			},
 			dataStr: randomString(5 * 1024),
@@ -156,7 +154,9 @@ func TestArchiveReaderLZ4(t *testing.T) {
 			name: "legacy small data",
 			setup: func(w io.Writer) *lz4.Writer {
 				lz4w := lz4.NewWriter(w)
-				lz4w.Apply(lz4.LegacyOption(true))
+				if err := lz4w.Apply(lz4.LegacyOption(true)); err != nil {
+					t.Fatal(err)
+				}
 				return lz4w
 			},
 			dataStr: randomString(100), // Smaller than pre-read size, 1024 bytes..
@@ -165,7 +165,9 @@ func TestArchiveReaderLZ4(t *testing.T) {
 			name: "legacy small data",
 			setup: func(w io.Writer) *lz4.Writer {
 				lz4w := lz4.NewWriter(w)
-				lz4w.Apply(lz4.LegacyOption(true))
+				if err := lz4w.Apply(lz4.LegacyOption(true)); err != nil {
+					t.Fatal(err)
+				}
 				return lz4w
 			},
 			dataStr: randomString(100), // Smaller than pre-read size, 1024 bytes..
@@ -174,7 +176,9 @@ func TestArchiveReaderLZ4(t *testing.T) {
 			name: "regular larger data with fast compression",
 			setup: func(w io.Writer) *lz4.Writer {
 				lz4w := lz4.NewWriter(w)
-				lz4w.Apply(lz4.CompressionLevelOption(lz4.Fast))
+				if err := lz4w.Apply(lz4.CompressionLevelOption(lz4.Fast)); err != nil {
+					t.Fatal(err)
+				}
 				return lz4w
 			},
 			dataStr: randomString(5 * 1024),
@@ -183,8 +187,9 @@ func TestArchiveReaderLZ4(t *testing.T) {
 			name: "legacy larger data with fast compression",
 			setup: func(w io.Writer) *lz4.Writer {
 				lz4w := lz4.NewWriter(w)
-				lz4w.Apply(lz4.LegacyOption(true))
-				lz4w.Apply(lz4.CompressionLevelOption(lz4.Fast))
+				if err := lz4w.Apply(lz4.LegacyOption(true), lz4.CompressionLevelOption(lz4.Fast)); err != nil {
+					t.Fatal(err)
+				}
 				return lz4w
 			},
 			dataStr: randomString(5 * 1024),
@@ -202,7 +207,9 @@ func TestArchiveReaderLZ4SlowCompressed(t *testing.T) {
 			name: "regular larger data with medium compression",
 			setup: func(w io.Writer) *lz4.Writer {
 				lz4w := lz4.NewWriter(w)
-				lz4w.Apply(lz4.CompressionLevelOption(lz4.Level5))
+				if err := lz4w.Apply(lz4.CompressionLevelOption(lz4.Level5)); err != nil {
+					t.Fatal(err)
+				}
 				return lz4w
 			},
 			dataStr: randomString(5 * 1024),
@@ -211,7 +218,9 @@ func TestArchiveReaderLZ4SlowCompressed(t *testing.T) {
 			name: "regular larger data with slow compression",
 			setup: func(w io.Writer) *lz4.Writer {
 				lz4w := lz4.NewWriter(w)
-				lz4w.Apply(lz4.CompressionLevelOption(lz4.Level9))
+				if err := lz4w.Apply(lz4.CompressionLevelOption(lz4.Level9)); err != nil {
+					t.Fatal(err)
+				}
 				return lz4w
 			},
 			dataStr: randomString(5 * 1024),
@@ -220,8 +229,9 @@ func TestArchiveReaderLZ4SlowCompressed(t *testing.T) {
 			name: "legacy larger data with medium compression",
 			setup: func(w io.Writer) *lz4.Writer {
 				lz4w := lz4.NewWriter(w)
-				lz4w.Apply(lz4.LegacyOption(true))
-				lz4w.Apply(lz4.CompressionLevelOption(lz4.Level5))
+				if err := lz4w.Apply(lz4.LegacyOption(true), lz4.CompressionLevelOption(lz4.Level5)); err != nil {
+					t.Fatal(err)
+				}
 				return lz4w
 			},
 			dataStr: randomString(5 * 1024),
@@ -230,8 +240,9 @@ func TestArchiveReaderLZ4SlowCompressed(t *testing.T) {
 			name: "legacy larger data with slow compression",
 			setup: func(w io.Writer) *lz4.Writer {
 				lz4w := lz4.NewWriter(w)
-				lz4w.Apply(lz4.LegacyOption(true))
-				lz4w.Apply(lz4.CompressionLevelOption(lz4.Level9))
+				if err := lz4w.Apply(lz4.LegacyOption(true), lz4.CompressionLevelOption(lz4.Level9)); err != nil {
+					t.Fatal(err)
+				}
 				return lz4w
 			},
 			dataStr: randomString(5 * 1024),
