@@ -8,6 +8,12 @@ linters:
     - thelper
     - unconvert
 
+issues:
+  include:
+    - EXC0012
+    - EXC0013
+    - EXC0014
+    - EXC0015
 linters-settings:
   revive:
     # Maximum number of open files at the same time.
