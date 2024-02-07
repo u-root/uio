@@ -24,8 +24,11 @@ var Log Logger = log.Default()
 
 type emptyLogger struct{}
 
+// Printf implements Logger.Printf.
 func (emptyLogger) Printf(format string, v ...interface{}) {}
-func (emptyLogger) Print(v ...interface{})                 {}
+
+// Print implements Logger.Print.
+func (emptyLogger) Print(v ...interface{}) {}
 
 // Null is a logger that prints nothing.
 var Null Logger = emptyLogger{}

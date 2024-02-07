@@ -34,6 +34,7 @@ type testLinePrefixWriter struct {
 	prefix string
 }
 
+// OneLine implements a uio.LineWriter.
 func (tsw *testLinePrefixWriter) OneLine(p []byte) {
 	tsw.tb.Logf("%s %s: %s", NowLog(), tsw.prefix, p)
 }
@@ -43,6 +44,7 @@ type testLineWriter struct {
 	tb testing.TB
 }
 
+// OneLine implements a uio.LineWriter.
 func (tsw *testLineWriter) OneLine(p []byte) {
 	tsw.tb.Logf("%s: %s", NowLog(), p)
 }
