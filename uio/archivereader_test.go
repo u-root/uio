@@ -64,6 +64,7 @@ func TestArchiveReaderPreReadShort(t *testing.T) {
 
 // randomString generates random string of fixed length in a fast and simple way.
 func randomString(l int) string {
+	//nolint
 	rand.Seed(time.Now().UnixNano())
 	r := make([]byte, l)
 	for i := 0; i < l; i++ {
