@@ -1,0 +1,81 @@
+name: Go
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Cancel running workflows on new push to a PR.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tidy:
+    name: Tidy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.22.x'
+
+      - name: gofmt
+        run: test -z "$(gofmt -s -l $(find -name '*.go'))"
+
+      - name: go mod tidy
+        run: |
+          go mod tidy
+          git status
+          if [[ -n "$(git status --porcelain .)" ]]; then
+            echo 'go.mod/go.sum is out-of-date: run `go mod tidy` and then check in the changes'
+            echo 'If `go mod tidy` results in no changes, make sure you are using the latest relase of Go'
+            git status --porcelain .
+            exit 1
+          fi
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goversion: ['1.21.x', '1.22.x']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.goversion }}
+
+      - run: go build -v ./...
+
+      - run: ./cross-compile.sh
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goversion: ['1.21.x', '1.22.x']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.goversion }}
+
+      - name: Test
+        run: go test -v -covermode atomic -coverpkg ./... -coverprofile cover.out ./...
+
+      - name: Race
+        run: go test -race -v ./...
+
+      - uses: codecov/codecov-action@v4-beta
+        env:
+          CODECOV_TOKEN: '9f38c23a-5d79-4a19-a90f-72edcac95ce1'
+        with:
+          flags: ${{ matrix.goversion }}
+          fail_ci_if_error: true
+          verbose: true
