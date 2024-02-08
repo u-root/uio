@@ -16,7 +16,6 @@ import "log"
 // It puts your information somewhere for safekeeping.
 type Logger interface {
 	Printf(format string, v ...interface{})
-	Print(v ...interface{})
 }
 
 // Log is a Logger that prints to the log package's default logger.
@@ -26,9 +25,6 @@ type emptyLogger struct{}
 
 // Printf implements Logger.Printf.
 func (emptyLogger) Printf(format string, v ...interface{}) {}
-
-// Print implements Logger.Print.
-func (emptyLogger) Print(v ...interface{}) {}
 
 // Null is a logger that prints nothing.
 var Null Logger = emptyLogger{}
