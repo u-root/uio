@@ -183,3 +183,16 @@ func TestDefaults(t *testing.T) {
 	l = Test(t)
 	l.Debugf("more foobar")
 }
+
+func TestBufOutput(t *testing.T) {
+	var s strings.Builder
+	l := New(slog.LevelDebug, MultiPrintf(nil, t.Logf, WritePrintf(&s)))
+	l.Debugf("test output!")
+	l.Infof("test output\n\n")
+
+	got := s.String()
+	want := "DEBUG test output!\nINFO test output\n\n"
+	if got != want {
+		t.Errorf("got = %v, want %v", got, want)
+	}
+}
